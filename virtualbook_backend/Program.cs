@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Sentry Initialization
 builder.WebHost.UseSentry(o =>
 {
-    o.Dns = "SENTRY_DSN_BACKEND";
+    o.Dsn = builder.Configuration["SENTRY_DSN_BACKEND"];
     o.Debug = true;
 
     // Configuraciones adicionales de Sentry
