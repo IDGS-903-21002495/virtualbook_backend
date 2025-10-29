@@ -3,12 +3,12 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
 # Copiar sólo el csproj primero para aprovechar cache de restore
-COPY ["virtualbook_backend.csproj", "./"]
+COPY ["src/VirtualBook/virtualbook_backend.csproj", "./"]
 RUN dotnet restore "./virtualbook_backend.csproj"
 
 # Copiar el resto del código y publicar
 COPY . .
-RUN dotnet publish "virtualbook_backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "src/VirtualBook/virtualbook_backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
