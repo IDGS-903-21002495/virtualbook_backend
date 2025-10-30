@@ -2,6 +2,7 @@
 ARG CACHEBUST=1
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG CACHEBUST
+RUN echo "Cache bust: $CACHEBUST"
 WORKDIR /src
 
 # Copiar sólo el csproj para aprovechar cache de restore (ruta corregida)
