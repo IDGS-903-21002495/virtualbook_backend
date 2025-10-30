@@ -113,7 +113,7 @@ jobs:
     steps:
       - name: Deploy Validation
         run: |
-          echo "VALIDACIÓN PRE-DEPLOY"
+          echo "VALIDACION PRE-DEPLOY"
           echo "================================================"
           echo "- Build ejecutado correctamente"
           echo "- Tests ejecutados y validados"
@@ -136,7 +136,7 @@ jobs:
           echo ""
           echo "========================================================================"
           echo ""
-          echo "   Deployed to production URL: ${{ secrets.RENDER_PRODUCTION_URL }}"
+          echo "   Deployed to production URL: https://virtualbook-backend.onrender.com"
           echo ""
           echo "========================================================================"
 
@@ -152,7 +152,7 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### Production deploy is live" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Deployed to production URL:** [${{ secrets.RENDER_PRODUCTION_URL }}](${{ secrets.RENDER_PRODUCTION_URL }})" >> $GITHUB_STEP_SUMMARY
+            echo "**Deployed to production URL:** [https://virtualbook-backend.onrender.com](https://virtualbook-backend.onrender.com)" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "---" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
