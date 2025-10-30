@@ -17,6 +17,12 @@ if (!string.IsNullOrEmpty(sentryDsn))
         o.Release = "virtualbook-backend@1.0.0";
         o.Debug = builder.Environment.IsDevelopment();
     });
+
+    builder.Logging.AddSentry(o =>
+    {
+        o.Dsn = sentryDsn;
+        // otras opciones de configuración...
+    });
 }
 
 // Add services to the container.
@@ -49,7 +55,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseSentryTracing();
+if (!string.IsNullOrEmpty(sentryDsn))
+{
+    app.UseSentryTracing();
+}
 
 app.UseCors("AllowAll");
 
