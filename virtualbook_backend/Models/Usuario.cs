@@ -4,6 +4,7 @@ namespace virtualbook_backend.Models
 {
     public class Usuario
     {
+        //Entidad usuario
         [Key]
         public int Id { get; set; }
 
