@@ -1,30 +1,32 @@
 using Microsoft.EntityFrameworkCore;
 using Sentry;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using virtualbook_backend.Data;
 var builder = WebApplication.CreateBuilder(args);
 
-// Sentry Initialization
-builder.WebHost.UseSentry(o =>
+var sentryDsn = builder.Configuration["SENTRY_DSN_BACKEND"];
+if (!string.IsNullOrEmpty(sentryDsn))
 {
-    o.Dsn = builder.Configuration["SENTRY_DSN_BACKEND"];
-    o.Debug = true;
+    builder.WebHost.UseSentry(o =>
+    {
+        o.Dsn = sentryDsn;
+        o.Debug = true;
 
-    // Configuraciones adicionales de Sentry
-    o.TracesSampleRate = 1.0; 
-    o.Environment = builder.Environment.EnvironmentName;
-    o.Release = "virtualbook-backend@1.0.0";
-    o.Debug = builder.Environment.IsDevelopment();
-});
+        o.TracesSampleRate = 1.0;
+        o.Environment = builder.Environment.EnvironmentName;
+        o.Release = "virtualbook-backend@1.0.0";
+        o.Debug = builder.Environment.IsDevelopment();
+    });
+}
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<VirtualBookDbContext>(options =>
-    options.UseSqlServer(connectionString)
+    options.UseNpgsql(connectionString)
 );
 
 builder.Services.AddCors(options =>
@@ -43,7 +45,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger();   
     app.UseSwaggerUI();
 }
 
