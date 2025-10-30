@@ -4,6 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using virtualbook_backend.Data;
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Sentry
 var sentryDsn = builder.Configuration["SENTRY_DSN_BACKEND"];
 if (!string.IsNullOrEmpty(sentryDsn))
 {
@@ -21,7 +22,7 @@ if (!string.IsNullOrEmpty(sentryDsn))
     builder.Logging.AddSentry(o =>
     {
         o.Dsn = sentryDsn;
-        // otras opciones de configuración...
+        
     });
 }
 
