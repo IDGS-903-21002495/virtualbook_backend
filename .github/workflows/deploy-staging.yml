@@ -128,19 +128,39 @@ jobs:
           curl -sS -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
           echo "Deploy iniciado correctamente en ambiente staging"
 
+      - name: Deploy Complete
+        run: |
+          echo "========================================================================"
+          echo ""
+          echo "                    Production deploy is live                          "
+          echo ""
+          echo "========================================================================"
+          echo ""
+          echo "   Deployed to production URL: ${{ secrets.RENDER_PRODUCTION_URL }}"
+          echo ""
+          echo "========================================================================"
+
       - name: Deploy Summary
         if: always()
         run: |
           echo "## Deploy Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ job.status }}" == "success" ]; then
-            echo " **Deploy completed successfully**" >> $GITHUB_STEP_SUMMARY
+            echo "**Deploy completed successfully**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "---" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Production deploy is live" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Deployed to production URL:** [${{ secrets.RENDER_PRODUCTION_URL }}](${{ secrets.RENDER_PRODUCTION_URL }})" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "---" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### Deployment Details" >> $GITHUB_STEP_SUMMARY
             echo "- Environment: **staging**" >> $GITHUB_STEP_SUMMARY
             echo "- Branch: **master**" >> $GITHUB_STEP_SUMMARY
             echo "- Platform: **Render**" >> $GITHUB_STEP_SUMMARY
-            echo "- Status: Success " >> $GITHUB_STEP_SUMMARY
+            echo "- Status: Success" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### Pipeline Summary" >> $GITHUB_STEP_SUMMARY
             echo "- Build passed" >> $GITHUB_STEP_SUMMARY
