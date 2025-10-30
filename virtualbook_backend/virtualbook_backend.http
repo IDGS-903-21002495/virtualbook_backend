@@ -1,6 +1,80 @@
 @virtualbook_backend_HostAddress = http://localhost:5279
+@virtualbook_backend_Production = https://virtualbook-backend.onrender.com
 
+### Test WeatherForecast (Local)
 GET {{virtualbook_backend_HostAddress}}/weatherforecast/
 Accept: application/json
+
+###
+
+### Test GET Usuarios (Local)
+GET {{virtualbook_backend_HostAddress}}/api/usuarios
+Accept: application/json
+
+###
+
+### Test POST Registro (Local)
+POST {{virtualbook_backend_HostAddress}}/api/usuarios/registro
+Content-Type: application/json
+
+{
+  "nombre": "Test User",
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+
+### Test POST Login (Local)
+POST {{virtualbook_backend_HostAddress}}/api/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+
+### Test POST Logout (Local)
+POST {{virtualbook_backend_HostAddress}}/api/usuarios/logout
+Content-Type: application/json
+
+###
+
+### ========== PRODUCCIÓN (RENDER) ==========
+
+### Test GET Usuarios (Producción)
+GET {{virtualbook_backend_Production}}/api/usuarios
+Accept: application/json
+
+###
+
+### Test POST Registro (Producción)
+POST {{virtualbook_backend_Production}}/api/usuarios/registro
+Content-Type: application/json
+
+{
+  "nombre": "Juan Perez",
+  "email": "juanito@gmail.com",
+  "password": "AnaPaulina123@"
+}
+
+###
+
+### Test POST Login (Producción)
+POST {{virtualbook_backend_Production}}/api/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "juanito@gmail.com",
+  "password": "AnaPaulina123@"
+}
+
+###
+
+### Test POST Logout (Producción)
+POST {{virtualbook_backend_Production}}/api/usuarios/logout
+Content-Type: application/json
 
 ###

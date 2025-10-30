@@ -31,6 +31,12 @@ if (!string.IsNullOrEmpty(sentryDsn))
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
+// Configurar rutas en minúsculas
+builder.Services.AddRouting(options =>
+{
+    options.LowercaseUrls = true;
+});
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<VirtualBookDbContext>(options =>
     options.UseNpgsql(connectionString)

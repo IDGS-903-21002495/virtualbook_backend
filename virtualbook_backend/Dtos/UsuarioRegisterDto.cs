@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace virtualbook_backend.DTOs
+namespace virtualbook_backend.Dtos
 {
     public class UsuarioRegisterDto
     {

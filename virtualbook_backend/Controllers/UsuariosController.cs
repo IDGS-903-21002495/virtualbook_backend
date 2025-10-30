@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using virtualbook_backend.Data;
-using virtualbook_backend.DTOs;
 using virtualbook_backend.Dtos;
 using virtualbook_backend.Models;
 
-namespace virtualbook_backend.Controllers
+namespace virtualbook_backend.Controllers   
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -110,7 +109,7 @@ namespace virtualbook_backend.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(loginDto.Email) || string.IsNullOrEmpty(loginDto.Password))
+                if (string.IsNullOrEmpty(loginDto?.Email) || string.IsNullOrEmpty(loginDto?.Password))
                 {
                     return BadRequest(new { mensaje = "Debe proporcionar email y contraseña" });
                 }
@@ -128,9 +127,6 @@ namespace virtualbook_backend.Controllers
                 {
                     return Unauthorized(new { mensaje = "Contraseña incorrecta" });
                 }
-
-                // (Opcional) Generar un token JWT si tu app lo requiere
-                // De momento solo retornamos los datos del usuario
 
                 var respuesta = new UsuarioResponseDto
                 {
