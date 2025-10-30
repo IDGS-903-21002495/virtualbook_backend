@@ -95,5 +95,77 @@ namespace virtualbook_backend.Controllers
                 return StatusCode(500, new { mensaje = "Error interno del servidor" });
             }
         }
+
+
+        /// <summary>
+        /// Inicia sesión de usuario
+        /// </summary>
+        /// <param name="loginDto">Credenciales del usuario</param>
+        /// <returns>Usuario autenticado</returns>
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<UsuarioResponseDto>> Login([FromBody] UsuarioLoginDto loginDto)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(loginDto.Email) || string.IsNullOrEmpty(loginDto.Password))
+                {
+                    return BadRequest(new { mensaje = "Debe proporcionar email y contraseña" });
+                }
+
+                // Buscar usuario por email
+                var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+                if (usuario == null)
+                {
+                    return Unauthorized(new { mensaje = "Usuario no encontrado" });
+                }
+
+                // Verificar contraseña
+                bool passwordValida = BCrypt.Net.BCrypt.Verify(loginDto.Password, usuario.Password);
+                if (!passwordValida)
+                {
+                    return Unauthorized(new { mensaje = "Contraseña incorrecta" });
+                }
+
+                // (Opcional) Generar un token JWT si tu app lo requiere
+                // De momento solo retornamos los datos del usuario
+
+                var respuesta = new UsuarioResponseDto
+                {
+                    Id = usuario.Id,
+                    Nombre = usuario.Nombre,
+                    Email = usuario.Email
+                };
+
+                _logger.LogInformation("Usuario inició sesión: {Email}", usuario.Email);
+
+                return Ok(new
+                {
+                    mensaje = "Inicio de sesión exitoso",
+                    usuario = respuesta
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error durante el inicio de sesión");
+                return StatusCode(500, new { mensaje = "Error interno del servidor" });
+            }
+        }
+
+
+        /// <summary>
+        /// Cierra la sesión del usuario actual
+        /// </summary>
+        /// <returns>Mensaje de confirmación</returns>
+        [HttpPost("logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Logout()
+        {
+            _logger.LogInformation("Usuario cerró sesión");
+            return Ok(new { mensaje = "Sesión cerrada exitosamente" });
+        }
+
     }
 }
