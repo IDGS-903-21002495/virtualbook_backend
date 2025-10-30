@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using virtualbook_backend.Data;
 using virtualbook_backend.DTOs;
+using virtualbook_backend.Dtos;
 using virtualbook_backend.Models;
 
 namespace virtualbook_backend.Controllers
@@ -17,6 +18,33 @@ namespace virtualbook_backend.Controllers
         {
             _context = context;
             _logger = logger;
+        }
+
+        /// <summary>
+        /// Obtiene la lista de todos los usuarios
+        /// </summary>
+        /// <returns>Lista de usuarios con nombre y email</returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<UsuariosListDto>>> ObtenerUsuarios()
+        {
+            try
+            {
+                var usuarios = await _context.Usuarios
+                    .Select(u => new UsuariosListDto
+                    {
+                        Nombre = u.Nombre,
+                        Email = u.Email
+                    })
+                    .ToListAsync();
+
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener la lista de usuarios");
+                return StatusCode(500, new { mensaje = "Error interno del servidor" });
+            }
         }
 
         /// <summary>
