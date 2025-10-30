@@ -1,0 +1,110 @@
+name: BE • Deploy a Render (staging)
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: |
+          echo "Restaurando dependencias..."
+          dotnet restore virtualbook_backend/virtualbook_backend.csproj
+          echo "Dependencias restauradas correctamente"
+
+      - name: Build
+        run: |
+          echo "Construyendo proyecto en modo Release..."
+          dotnet build virtualbook_backend/virtualbook_backend.csproj -c Release --no-restore
+          echo "Build completado exitosamente"
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: |
+          echo "Restaurando dependencias para testing..."
+          dotnet restore virtualbook_backend/virtualbook_backend.csproj
+
+      - name: Build
+        run: |
+          echo "Construyendo proyecto para testing..."
+          dotnet build virtualbook_backend/virtualbook_backend.csproj -c Release --no-restore
+
+      - name: Run Tests
+        run: |
+          echo "Ejecutando pruebas automáticas..."
+          echo "================================================"
+          dotnet test virtualbook_backend/virtualbook_backend.csproj -c Release --no-build --verbosity detailed --logger "console;verbosity=detailed"
+          echo "================================================"
+          echo "Pruebas completadas - Validando comportamiento del sistema"
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "RESUMEN DE PRUEBAS"
+          echo "================================================"
+          echo "Estado: ${{ job.status }}"
+          echo "Rama: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Autor: ${{ github.actor }}"
+          echo "================================================"
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "Todas las pruebas pasaron correctamente"
+            echo "El comportamiento del sistema es válido"
+          else
+            echo "Algunas pruebas fallaron"
+            echo "Se requiere revisión antes del deploy"
+          fi
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: [build, test]
+    steps:
+      - name: Deploy Validation
+        run: |
+          echo "VALIDACIÓN PRE-DEPLOY"
+          echo "================================================"
+          echo "- Build ejecutado correctamente"
+          echo "- Tests ejecutados y validados"
+          echo "- Sistema listo para deployment"
+          echo "================================================"
+
+      - name: Trigger Render Deploy
+        run: |
+          echo "Disparando deploy en Render..."
+          echo "Equipo de desarrollo: Push realizado"
+          echo "Equipo de QA/DevOps: Analizando resultados..."
+          curl -sS -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          echo "Deploy iniciado correctamente en ambiente staging"
+
+      - name: Deploy Summary
+        run: |
+          echo "MÉTRICAS DE EJECUCIÓN"
+          echo "================================================"
+          echo "Rama desplegada: master"
+          echo "Ambiente: staging"
+          echo "Timestamp: $(date)"
+          echo "================================================"
+          echo "Pipeline de CI/CD completado exitosamente"
