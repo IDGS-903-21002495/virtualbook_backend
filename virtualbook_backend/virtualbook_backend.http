@@ -1,11 +1,14 @@
 @virtualbook_backend_HostAddress = http://localhost:5279
 @virtualbook_backend_Production = https://virtualbook-backend.onrender.com
+@usuarioId = 1
 
 ### Test WeatherForecast (Local)
 GET {{virtualbook_backend_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+### ========== USUARIOS ==========
 
 ### Test GET Usuarios (Local)
 GET {{virtualbook_backend_HostAddress}}/api/usuarios
@@ -39,6 +42,52 @@ Content-Type: application/json
 ### Test POST Logout (Local)
 POST {{virtualbook_backend_HostAddress}}/api/usuarios/logout
 Content-Type: application/json
+
+###
+
+### ========== LIBROS (LOCAL) ==========
+
+### Test GET Libros por Usuario (Local)
+GET {{virtualbook_backend_HostAddress}}/api/libros/usuario/{{usuarioId}}
+Accept: application/json
+
+###
+
+### Test GET Libro por ID y Usuario (Local)
+GET {{virtualbook_backend_HostAddress}}/api/libros/usuario/{{usuarioId}}/libro/1
+Accept: application/json
+
+###
+
+### Test POST Agregar Libro (Local)
+POST {{virtualbook_backend_HostAddress}}/api/libros/usuario/{{usuarioId}}/libro
+Content-Type: application/json
+
+{
+  "titulo": "Cien años de soledad",
+  "autor": "Gabriel García Márquez",
+  "genero": "Realismo mágico",
+  "descripcion": "Una obra maestra de la literatura latinoamericana"
+}
+
+###
+
+### Test PUT Actualizar Libro (Local)
+PUT {{virtualbook_backend_HostAddress}}/api/libros/usuario/{{usuarioId}}/libro/1
+Content-Type: application/json
+
+{
+  "titulo": "Cien años de soledad - Edición actualizada",
+  "autor": "Gabriel García Márquez",
+  "genero": "Realismo mágico",
+  "descripcion": "Una obra maestra de la literatura latinoamericana - Nueva descripción"
+}
+
+###
+
+### Test DELETE Eliminar Libro (Local)
+DELETE {{virtualbook_backend_HostAddress}}/api/libros/usuario/{{usuarioId}}/libro/1
+Accept: application/json
 
 ###
 
@@ -76,5 +125,49 @@ Content-Type: application/json
 ### Test POST Logout (Producción)
 POST {{virtualbook_backend_Production}}/api/usuarios/logout
 Content-Type: application/json
+
+###
+
+### Test GET Libros por Usuario (Producción)
+GET {{virtualbook_backend_Production}}/api/libros/usuario/1
+Accept: application/json
+
+###
+
+### Test GET Libro por ID y Usuario (Producción)
+GET {{virtualbook_backend_Production}}/api/libros/usuario/1/libro/1
+Accept: application/json
+
+###
+
+### Test POST Agregar Libro (Producción)
+POST {{virtualbook_backend_Production}}/api/libros/usuario/1/libro
+Content-Type: application/json
+
+{
+  "titulo": "Don Quijote de la Mancha",
+  "autor": "Miguel de Cervantes",
+  "genero": "Novela",
+  "descripcion": "La obra cumbre de la literatura española"
+}
+
+###
+
+### Test PUT Actualizar Libro (Producción)
+PUT {{virtualbook_backend_Production}}/api/libros/usuario/1/libro/1
+Content-Type: application/json
+
+{
+  "titulo": "Don Quijote de la Mancha - Edición Completa",
+  "autor": "Miguel de Cervantes Saavedra",
+  "genero": "Novela",
+  "descripcion": "La obra cumbre de la literatura española - Edición completa"
+}
+
+###
+
+### Test DELETE Eliminar Libro (Producción)
+DELETE {{virtualbook_backend_Production}}/api/libros/usuario/1/libro/1
+Accept: application/json
 
 ###
